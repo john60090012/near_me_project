@@ -129,7 +129,6 @@ const styles = StyleSheet.create({
 export default LoginScreen;
 */
 
-
 import React from 'react';
 import {SafeAreaView, View, Text, TextInput, Image, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -175,7 +174,7 @@ const LoginScreen = ({navigation}) => {
 
   
   return (
-    <SafeAreaView
+    <View
       style={{paddingHorizontal: 20, flex: 1, backgroundColor: COLORS.white}}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{flexDirection: 'row', marginTop: 40, }}>
@@ -272,7 +271,7 @@ const LoginScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

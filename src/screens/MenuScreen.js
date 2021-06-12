@@ -1,7 +1,6 @@
 import React from 'react';
 import {Dimensions, SafeAreaView, StyleSheet, View, Text, Image, TextInput, TouchableHighlight,
-  TouchableOpacity,} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
+  TouchableOpacity, FlatList} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import COLORS from '../consts/colors';
 import { useState, useEffect } from "react";
@@ -20,7 +19,6 @@ const MenuScreen = ({navigation}) => {
   const [Category, setCategory] = useState([]);
   const [Cart, setCart] = useState([]);
 
-
   useEffect(() => {
     loadCategoryData();
   }, []);
@@ -31,7 +29,6 @@ const MenuScreen = ({navigation}) => {
     setCategory(data);
     console.log(data);
   }
-
 
   const Card = ({menus}) => {
     return (
@@ -79,7 +76,7 @@ const MenuScreen = ({navigation}) => {
     }
 
     return (
-        <>
+        <View>
             <Text style={{fontSize: 20, fontWeight: 'bold', marginLeft: 20}}>{categories.name}</Text>
             <FlatList
               showsVerticalScrollIndicator={false}
@@ -87,21 +84,9 @@ const MenuScreen = ({navigation}) => {
               data={Menu}
               renderItem={({item}) => <Card menus={item} />}
             />
-        </>
+        </View>
     );
   };
-
-  if (Category.length == 0) {
-    return (
-    <View style={{backgroundColor: COLORS.white, position: 'absolute', 
-    top: 0, left: 0, 
-    right: 0, bottom: 0, 
-    justifyContent: 'center', 
-    alignItems: 'center'}}>
-      <Text>ไม่พบรายการอาหารใน{navigation.getParam('shopname')}</Text>
-    </View>
-    );
-  }
 
 
   return (
@@ -133,11 +118,13 @@ const MenuScreen = ({navigation}) => {
         data={Category}
         renderItem={({item}) => <Categoryhead categories={item} />}
       />
+      
     </View>
   );
 };
 
 const style = StyleSheet.create({
+  
   header: {
     marginTop: 20,
     flexDirection: 'row',
@@ -183,6 +170,7 @@ const style = StyleSheet.create({
     marginLeft: 125,
     marginTop: 20,
   },// Margin left is added later
+  
 });
 
 export default MenuScreen;

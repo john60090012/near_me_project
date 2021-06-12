@@ -1,10 +1,10 @@
 import React from 'react';
 import { Text, StyleSheet, ScrollView, TouchableOpacity, FlatList, Image, View, Dimensions,TouchableHighlight, TextInput} from 'react-native';
-import Searchbox from '../components/Searchbox';
 import { useState, useEffect } from "react";
 //import TabNavigator from '../navigations/BottomNavigation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import COLORS from '../consts/colors';
+
 
 
 const {width} = Dimensions.get('screen');   //get size of current screen to calculate card width 
@@ -16,18 +16,25 @@ const CanteenScreen = ({navigation}) => {
   const apiUrl = window.apiurl + 'api/markets/markets/marketchain/1/';
 
   const [Canteens, setCanteens] = useState([]);
+  const [Search, setSearch] = useState([]);
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [Search]);
 
   const loadData = async () => {
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-    setCanteens(data);
-    console.log(data);
+    if (Search.length == 0) {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      setCanteens(data);
+      console.log(data);
+    } else {
+      const response = await fetch(window.apiurl + 'api/markets/markets/search/?search=' + Search);
+      const data = await response.json();
+      setCanteens(data);
+      console.log(data);
+    }
   }
-
 
   const MenuDetail = ({canteen}) => {
     return (
@@ -37,7 +44,7 @@ const CanteenScreen = ({navigation}) => {
       onPress={() => {navigation.navigate('Shop', {canteenid: canteen.id, canteenname: canteen.name})}}>
       <View style={style.card}>
         <View style={{alignItems: 'flex-end', top: 20, left:-20 }}>
-          <img src={canteen.main_image} style={{height: 120, width: 120, borderRadius: 15}} />
+          <img src={canteen.main_image} style={{height: 100, width: 120, borderRadius: 15}} />
         </View>
         <View style={{marginHorizontal: 20, marginVertical: -80}}>
           <Text style={{fontSize: 18, fontWeight: 'bold'}}>{canteen.name}</Text>
@@ -85,10 +92,8 @@ const CanteenScreen = ({navigation}) => {
           <TextInput
             style={{flex: 1, fontSize: 18}}
             placeholder="ค้นหาร้านอาหาร"
+            onChangeText={(Search) => setSearch(Search)}
           />
-        </View>
-        <View style={style.searchBtn}>
-          <Icon name="search" size={28} color={COLORS.white} />
         </View>
       </View>
         </View>
@@ -155,7 +160,7 @@ const style = StyleSheet.create({
     paddingHorizontal: 20,
   },
   card: {
-    height: 160,
+    height: 140,
     width: cardWidth,
     marginHorizontal: 10,
     marginBottom: 10,

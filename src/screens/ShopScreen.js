@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text, StyleSheet, ScrollView, TouchableOpacity, FlatList, Image, View, Dimensions,TouchableHighlight, TextInput } from 'react-native';
-import Searchbox from '../components/Searchbox';
 import { useState, useEffect } from "react";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import COLORS from '../consts/colors';
@@ -16,18 +15,28 @@ const ShopScreen = ({navigation}) => {
   //const { canteenid } = route.params;
 
   const [Shops, setShops] = useState([]);
+  const [Search, setSearch] = useState([]);
 
   useEffect(() => {
     ShopsloadData();
-  }, []);
+  }, [Search]);
 
 
  const ShopsloadData = async () => {
+   if (Search.length == 0) {
     const response = await fetch(window.apiurl + 'api/shops/shops/market/' + navigation.getParam('canteenid') + '/');
     const data = await response.json();
     setShops(data);
     console.log(data);
+   } else {
+    const response = await fetch(window.apiurl + 'api/shops/shops/market/' + navigation.getParam('canteenid') + '/search/?search=' + Search);
+    const data = await response.json();
+    setShops(data);
+    console.log(data);
+   }
+
   }
+
 
 
   const Card = ({stores}) => {
@@ -62,18 +71,20 @@ const ShopScreen = ({navigation}) => {
     { name: 'Shop2', shopimg: require('../../assets/menu/FriedRice.jpg'), description:'international food', goto: 'Menu', canteenloc:'phrathep' },
     { name: 'Shop3', shopimg: require('../../assets/menu/FriedRice.jpg'), description:'Noodle ', goto: 'Menu', canteenloc:'phrathep'}
   ];
-*/
-  if (Shops.length == 0) {
+
+    if (Shops.length == 0) {
     return (
     <View style={{backgroundColor: COLORS.white, position: 'absolute', 
     top: 0, left: 0, 
     right: 0, bottom: 0, 
     justifyContent: 'center', 
     alignItems: 'center'}}>
-      <Text>ไม่พบร้านที่กำลังค้นหาใน{Canteens.name}</Text>
+      <Text>ไม่พบร้านที่กำลังค้นหาใน{navigation.getParam('canteenname')}</Text>
     </View>
     );
   }
+*/
+
 
 
   return (
@@ -109,6 +120,7 @@ const ShopScreen = ({navigation}) => {
           <TextInput
             style={{flex: 1, fontSize: 18}}
             placeholder="ค้นหาร้านอาหาร"
+            onChangeText={(Search) => setSearch(Search)}
           />
         </View>
         <View style={style.searchBtn}>
